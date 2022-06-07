@@ -6,11 +6,22 @@ import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
+programming_languages = [
+    'JavaScript',
+    'Java',
+    'Python',
+    'Ruby',
+    'PHP',
+    'C++',
+    'C#',
+    'Go'
+]
 
-def predict_rub_salary_sj(vacancy):
+
+def predict_rub_salary_sj(vacancy, token):
     sj_api_url = 'https://api.superjob.ru/2.0/vacancies'
     headers = {
-        'X-Api-App-Id': sj_api_token
+        'X-Api-App-Id': token
     }
     expected_salaries = []
     for page in count(0):
@@ -116,25 +127,17 @@ def display_table(table_data_dict, title):
     print(table.table)
 
 
-if __name__ == "__main__":
+def main():
     load_dotenv()
-
-
     sj_api_token = os.getenv('SJ_TOKEN')
-    programming_languages = [
-        'JavaScript',
-        'Java',
-        'Python',
-        'Ruby',
-        'PHP',
-        'C++',
-        'C#',
-        'Go'
-    ]
     hh_salary_data = {}
     sj_salary_data = {}
-    for vacancy in programming_languages:
-        hh_salary_data[vacancy] = predict_rub_salary_hh(vacancy)
-        sj_salary_data[vacancy] = predict_rub_salary_sj(vacancy)
+    for lang in programming_languages:
+        hh_salary_data[lang] = predict_rub_salary_hh(lang)
+        sj_salary_data[lang] = predict_rub_salary_sj(lang, sj_api_token)
     display_table(hh_salary_data, 'HeadHunter Moscow')
     display_table(sj_salary_data, 'SuperJob Moscow')
+
+
+if __name__ == "__main__":
+    main()

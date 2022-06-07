@@ -82,12 +82,12 @@ def predict_rub_salary_hh(vacancy):
 
 
 def predict_salary(salary_from, salary_to):
-    if salary_to == 0 or False and salary_from == 0 or False:
+    if not salary_to and not salary_from:
         return None
     else:
-        if salary_to is None or salary_to == 0:
+        if not salary_to:
             return salary_from * 1.2
-        elif salary_from is None or salary_from == 0:
+        elif not salary_from:
             return salary_to * 0.8
         else:
             return (salary_from + salary_to) / 2

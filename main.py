@@ -19,7 +19,6 @@ programming_languages = [
 
 
 def predict_rub_salary_sj(vacancy, token):
-    sj_api_url = 'https://api.superjob.ru/2.0/vacancies'
     headers = {
         'X-Api-App-Id': token
     }
@@ -31,7 +30,7 @@ def predict_rub_salary_sj(vacancy, token):
             'period': 30,
             'page': page
         }
-        response = requests.get(sj_api_url, headers=headers, params=params)
+        response = requests.get('https://api.superjob.ru/2.0/vacancies', headers=headers, params=params)
         response.raise_for_status()
         content = response.json()
         objects = content.get('objects')
@@ -56,7 +55,6 @@ def predict_rub_salary_sj(vacancy, token):
 
 
 def predict_rub_salary_hh(vacancy):
-    hh_api_url = 'https://api.hh.ru/vacancies/'
     page = 0
     payload = {
         'text': f'Программист {vacancy}',
@@ -64,13 +62,14 @@ def predict_rub_salary_hh(vacancy):
         'only_with_salary': True,
         'page': page
     }
-    response = requests.get(hh_api_url, params=payload)
+    response = requests.get('https://api.hh.ru/vacancies/', params=payload)
     response.raise_for_status()
-    pages_number = response.json()['pages']
+    content = response.json()
+    pages_number = content['pages']
     expected_salaries = []
     while page < pages_number:
-        content = response.json().get('items')
-        for item in content:
+        items = content.get('items')
+        for item in items:
             salary = item.get('salary')
             salary_from = salary.get('from')
             salary_to = salary.get('to')

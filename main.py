@@ -6,6 +6,7 @@ import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
+
 programming_languages = [
     'JavaScript',
     'Java',
@@ -44,8 +45,12 @@ def predict_rub_salary_sj(vacancy, token):
         vacancies_found = content.get('total')
         if not is_more_pages:
             break
-    vacancies_processed = len(expected_salaries)
-    average_salary = int(mean(expected_salaries))
+    if vacancies_found < 1:
+        vacancies_processed = vacancies_found
+        average_salary = vacancies_found
+    else:
+        vacancies_processed = len(expected_salaries)
+        average_salary = int(mean(expected_salaries))
     sj_salary_template = {
         'vacancies_found': vacancies_found,
         'vacancies_processed': vacancies_processed,
@@ -82,9 +87,13 @@ def predict_rub_salary_hh(vacancy):
             else:
                 pass
         page += 1
-    average_salary = int(mean(expected_salaries))
-    vacancies_processed = len(expected_salaries)
-    vacancies_found = response.json().get('found')
+    vacancies_found = content.get('found')
+    if vacancies_found < 1:
+        vacancies_processed = vacancies_found
+        average_salary = vacancies_found
+    else:
+        vacancies_processed = len(expected_salaries)
+        average_salary = int(mean(expected_salaries))
     hh_salary_template = {
         'vacancies_found': vacancies_found,
         'vacancies_processed': vacancies_processed,

@@ -33,15 +33,16 @@ def predict_rub_salary_sj(vacancy, token):
         }
         response = requests.get(sj_api_url, headers=headers, params=params)
         response.raise_for_status()
-        content = response.json().get('objects')
-        for item in content:
+        content = response.json()
+        objects = content.get('objects')
+        for item in objects:
             salary_from = item.get('payment_from')
             salary_to = item.get('payment_to')
             if not predict_salary(salary_from, salary_to):
                 continue
             expected_salaries.append(predict_salary(salary_from, salary_to))
-        is_more_pages = response.json()['more']
-        vacancies_found = response.json().get('total')
+        is_more_pages = content['more']
+        vacancies_found = content.get('total')
         if not is_more_pages:
             break
     vacancies_processed = len(expected_salaries)

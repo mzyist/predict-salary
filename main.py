@@ -8,7 +8,7 @@ from terminaltables import AsciiTable
 
 
 def predict_rub_salary_sj(vacancy):
-    global vacancies_found
+    sj_api_url = 'https://api.superjob.ru/2.0/vacancies'
     headers = {
         'X-Api-App-Id': sj_api_token
     }
@@ -44,6 +44,7 @@ def predict_rub_salary_sj(vacancy):
 
 
 def predict_rub_salary_hh(vacancy):
+    hh_api_url = 'https://api.hh.ru/vacancies/'
     page = 0
     payload = {
         'text': f'Программист {vacancy}',
@@ -117,8 +118,8 @@ def display_table(table_data_dict, title):
 
 if __name__ == "__main__":
     load_dotenv()
-    sj_api_url = 'https://api.superjob.ru/2.0/vacancies'
-    hh_api_url = 'https://api.hh.ru/vacancies/'
+
+
     sj_api_token = os.getenv('SJ_TOKEN')
     programming_languages = [
         'JavaScript',
